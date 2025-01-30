@@ -46,7 +46,44 @@ canvas {
     cursor: pointer;
 }
 
-#startScreen,
+#mainMenu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-size: cover;
+    background-position: center;
+}
+
+#stageBackground {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
+}
+
+#mainMenu button {
+    padding: 10px 20px;
+    font-size: 20px;
+    margin: 10px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#storeScreen,
+#stagesScreen,
 #winScreen,
 #loseScreen {
     position: fixed;
@@ -62,7 +99,8 @@ canvas {
     flex-direction: column;
 }
 
-#startScreen button,
+#storeScreen button,
+#stagesScreen button,
 #winScreen button,
 #loseScreen button {
     padding: 10px 20px;
@@ -117,4 +155,4 @@ canvas {
 #shoot {
     grid-area: shoot;
     background-color: #ff0000;
-}
+    }
