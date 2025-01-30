@@ -9,9 +9,13 @@
 <body>
     <!-- Cutscene -->
     <div id="cutscene">
+        <video id="cutsceneVideo" autoplay muted>
+            <source src="assets/cutscene.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
         <div id="cutsceneText">
             <h1>قصة اللعبة</h1>
-            <p>في عالم مليء بالأعداء، يجب عليك جمع الكنز الذهبي وتجنب الأعداء الحمراء. هل أنت مستعد للتحدي؟</p>
+            <p>في عالم مليء بالوحوش الخطيرة، يجب عليك جمع الكنز الذهبي وتدمير الوحوش باستخدام النار. هل أنت مستعد للتحدي؟</p>
             <button id="skipCutscene">تخطي</button>
         </div>
     </div>
@@ -19,7 +23,7 @@
     <!-- شاشة البداية -->
     <div id="startScreen">
         <h1>لعبة الكنز الذهبي!</h1>
-        <p>حرك المكعب الأخضر باستخدام الأزرار لجمع الكنز الذهبي وتجنب الأعداء الحمراء.</p>
+        <p>حرك المكعب الأخضر باستخدام الأزرار لجمع الكنز الذهبي وتدمير الوحوش.</p>
         <button id="startButton">ابدأ اللعبة</button>
     </div>
 
@@ -41,9 +45,10 @@
         <button id="left">⬅️</button>
         <button id="down">⬇️</button>
         <button id="right">➡️</button>
+        <button id="shoot">🔥</button>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="script.js"></script>
 </body>
-</html>
+    </html>
