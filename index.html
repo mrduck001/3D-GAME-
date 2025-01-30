@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لعبة 3D بقصة بسيطة</title>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // المشهد، الكاميرا، والرندرر
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // إضاءة
+        const light = new THREE.DirectionalLight(0xffffff, 1);
+        light.position.set(5, 5, 5).normalize();
+        scene.add(light);
+
+        // إنشاء شخصية (مكعب)
+        const playerGeometry = new THREE.BoxGeometry(1, 1, 1);
+        const playerMaterial = new THREE.MeshPhongMaterial({ color: 0x00ff00 });
+        const player = new THREE.Mesh(playerGeometry, playerMaterial);
+        scene.add(player);
+
+        // إنشاء كنز (كرة)
+        const treasureGeometry = new THREE.SphereGeometry(0.5, 32, 32);
+        const treasureMaterial = new THREE.MeshPhongMaterial({ color: 0xffd700 });
+        const treasure = new THREE.Mesh(treasureGeometry, treasureMaterial);
+        treasure.position.set(5, 0, 0); // وضع الكنز في مكان بعيد
+        scene.add(treasure);
+
+        // وضع الكاميرا
+        camera.position.set(0, 5, 10);
+        camera.lookAt(player.position);
+
+        // التحكم بالشخصية
+        const playerSpeed = 0.1;
+        document.addEventListener('keydown', (event) => {
+            switch (event.key) {
+                case 'ArrowUp': // تحريك للأمام
+                    player.position.z -= playerSpeed;
+                    break;
+                case 'ArrowDown': // تحريك للخلف
+                    player.position.z += playerSpeed;
+                    break;
+                case 'ArrowLeft': // تحريك لليسار
+                    player.position.x -= playerSpeed;
+                    break;
+                case 'ArrowRight': // تحريك لليمين
+                    player.position.x += playerSpeed;
+                    break;
+            }
+        });
+
+        // دورة التصيير (الرندر)
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // التحقق إذا وصلت الشخصية للكنز
+            if (player.position.distanceTo(treasure.position) < 1) {
+                alert("مبروك! لقد وجدت الكنز! 🎉");
+                treasure.position.set(Math.random() * 10 - 5, 0, Math.random() * 10 - 5); // نقل الكنز لمكان عشوائي جديد
+            }
+
+            renderer.render(scene, camera);
+        }
+        animate();
+    </script>
+</body>
+</html>
