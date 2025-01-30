@@ -20,23 +20,49 @@
         </div>
     </div>
 
-    <!-- شاشة البداية -->
-    <div id="startScreen">
-        <h1>لعبة الكنز الذهبي!</h1>
-        <p>حرك المكعب الأخضر باستخدام الأزرار لجمع الكنز الذهبي وتدمير الوحوش.</p>
-        <button id="startButton">ابدأ اللعبة</button>
+    <!-- Main Menu -->
+    <div id="mainMenu">
+        <div id="stageBackground"></div>
+        <button id="storeButton">المتجر</button>
+        <button id="stagesButton">المراحل</button>
+        <button id="startGameButton">ابدأ اللعب</button>
+    </div>
+
+    <!-- شاشة المتجر -->
+    <div id="storeScreen" style="display: none;">
+        <h1>المتجر</h1>
+        <p>العملات: <span id="coinsCount">0</span></p>
+        <div>
+            <h2>الأشكال</h2>
+            <div id="shapesContainer"></div>
+        </div>
+        <div>
+            <h2>الألوان</h2>
+            <div id="colorsContainer"></div>
+        </div>
+        <button id="backToMenuButton">العودة</button>
+    </div>
+
+    <!-- شاشة المراحل -->
+    <div id="stagesScreen" style="display: none;">
+        <h1>المراحل</h1>
+        <div id="stagesContainer"></div>
+        <button id="backToMenuButtonStages">العودة</button>
     </div>
 
     <!-- شاشة الفوز -->
     <div id="winScreen" style="display: none;">
         <h1>مبروك! لقد وجدت الكنز! 🎉</h1>
-        <button id="restartButton">العب مرة أخرى</button>
+        <p>لقد ربحت 50 عملة!</p>
+        <button id="restartButton">العب من جديد</button>
+        <button id="mainMenuButtonWin">الصفحة الرئيسية</button>
     </div>
 
     <!-- شاشة الخسارة -->
     <div id="loseScreen" style="display: none;">
         <h1>انتبه! لقد خسرت! 😢</h1>
-        <button id="restartButtonLose">العب مرة أخرى</button>
+        <button id="restartButtonLose">العب من جديد</button>
+        <button id="mainMenuButtonLose">الصفحة الرئيسية</button>
     </div>
 
     <!-- عناصر التحكم باللمس -->
