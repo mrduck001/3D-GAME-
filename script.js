@@ -58,7 +58,8 @@ const controls = {
     up: false,
     down: false,
     left: false,
-    right: false
+    right: false,
+    shoot: false
 };
 
 document.getElementById('up').addEventListener('touchstart', () => controls.up = true);
@@ -69,17 +70,24 @@ document.getElementById('left').addEventListener('touchstart', () => controls.le
 document.getElementById('left').addEventListener('touchend', () => controls.left = false);
 document.getElementById('right').addEventListener('touchstart', () => controls.right = true);
 document.getElementById('right').addEventListener('touchend', () => controls.right = false);
+document.getElementById('shoot').addEventListener('touchstart', () => controls.shoot = true);
 
 // مؤثرات صوتية
 const winSound = new Audio('assets/win-sound.mp3'); // صوت عند الفوز
 const loseSound = new Audio('assets/lose-sound.mp3'); // صوت عند الخسارة
+const shootSound = new Audio('assets/shoot-sound.mp3'); // صوت عند إطلاق النار
 
 // Cutscene
 const cutscene = document.getElementById('cutscene');
-const cutsceneText = document.getElementById('cutsceneText');
+const cutsceneVideo = document.getElementById('cutsceneVideo');
 const skipCutsceneButton = document.getElementById('skipCutscene');
 
 skipCutsceneButton.addEventListener('click', () => {
+    cutscene.style.display = 'none';
+    startScreen.style.display = 'flex';
+});
+
+cutsceneVideo.addEventListener('ended', () => {
     cutscene.style.display = 'none';
     startScreen.style.display = 'flex';
 });
@@ -127,6 +135,10 @@ function animate() {
     if (controls.left) player.position.x -= playerSpeed;
     if (controls.right) player.position.x += playerSpeed;
 
+    // تحريك الكاميرا مع اللاعب
+    camera.position.set(player.position.x, 5, player.position.z + 10);
+    camera.lookAt(player.position);
+
     // التحقق إذا وصلت الشخصية للكنز
     if (player.position.distanceTo(treasure.position) < 1) {
         winSound.play();
@@ -134,10 +146,14 @@ function animate() {
         gameStarted = false;
     }
 
-    // تحريك الأعداء بشكل عشوائي
+    // تحريك الأعداء نحو اللاعب
     enemies.forEach(enemy => {
-        enemy.position.x += (Math.random() - 0.5) * 0.1;
-        enemy.position.z += (Math.random() - 0.5) * 0.1;
+        const direction = new THREE.Vector3(
+            player.position.x - enemy.position.x,
+            player.position.y - enemy.position.y,
+            player.position.z - enemy.position.z
+        ).normalize();
+        enemy.position.add(direction.multiplyScalar(0.05));
 
         // التحقق إذا لمس اللاعب عدوًا
         if (player.position.distanceTo(enemy.position) < 1) {
@@ -147,10 +163,22 @@ function animate() {
         }
     });
 
+    // إطلاق النار
+    if (controls.shoot) {
+        shootSound.play();
+        controls.shoot = false;
+        enemies.forEach((enemy, index) => {
+            if (player.position.distanceTo(enemy.position) < 5) {
+                scene.remove(enemy);
+                enemies.splice(index, 1);
+            }
+        });
+    }
+
     // زيادة عدد الأعداء مع الوقت
     if (Math.random() < 0.01) {
         createEnemy();
     }
 
     renderer.render(scene, camera);
-}
+                                                              }
