@@ -4,155 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>لعبة 3D للتلفون</title>
-    <style>
-        body { margin: 0; overflow: hidden; }
-        canvas { display: block; }
-        #controls {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            display: grid;
-            grid-template-areas:
-                ". up ."
-                "left down right";
-            gap: 10px;
-        }
-        #controls button {
-            width: 80px;
-            height: 80px;
-            font-size: 24px;
-            background-color: rgba(0, 0, 0, 0.7);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            touch-action: none;
-        }
-        #up { grid-area: up; }
-        #left { grid-area: left; }
-        #down { grid-area: down; }
-        #right { grid-area: right; }
-        #startScreen, #winScreen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.9);
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            font-family: Arial, sans-serif;
-        }
-        #startScreen button, #winScreen button {
-            padding: 10px 20px;
-            font-size: 20px;
-            margin-top: 20px;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script>
-        // العناصر الأساسية
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(renderer.domElement);
-
-        // إضاءة
-        const light = new THREE.DirectionalLight(0xffffff, 1);
-        light.position.set(5, 5, 5).normalize();
-        scene.add(light);
-
-        // إنشاء شخصية (مكعب)
-        const playerGeometry = new THREE.BoxGeometry(1, 1, 1);
-        const playerMaterial = new THREE.MeshPhongMaterial({ color: 0x00ff00 });
-        const player = new THREE.Mesh(playerGeometry, playerMaterial);
-        scene.add(player);
-
-        // إنشاء كنز (كرة)
-        const treasureGeometry = new THREE.SphereGeometry(0.5, 32, 32);
-        const treasureMaterial = new THREE.MeshPhongMaterial({ color: 0xffd700 });
-        const treasure = new THREE.Mesh(treasureGeometry, treasureMaterial);
-        treasure.position.set(5, 0, 0);
-        scene.add(treasure);
-
-        // وضع الكاميرا
-        camera.position.set(0, 5, 10);
-        camera.lookAt(player.position);
-
-        // التحكم باللمس
-        const playerSpeed = 0.1;
-        const controls = {
-            up: false,
-            down: false,
-            left: false,
-            right: false
-        };
-
-        document.getElementById('up').addEventListener('touchstart', () => controls.up = true);
-        document.getElementById('up').addEventListener('touchend', () => controls.up = false);
-        document.getElementById('down').addEventListener('touchstart', () => controls.down = true);
-        document.getElementById('down').addEventListener('touchend', () => controls.down = false);
-        document.getElementById('left').addEventListener('touchstart', () => controls.left = true);
-        document.getElementById('left').addEventListener('touchend', () => controls.left = false);
-        document.getElementById('right').addEventListener('touchstart', () => controls.right = true);
-        document.getElementById('right').addEventListener('touchend', () => controls.right = false);
-
-        // مؤثرات صوتية
-        const winSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2216/2216-preview.mp3'); // صوت عند الفوز
-
-        // شاشة البداية
-        const startScreen = document.getElementById('startScreen');
-        const winScreen = document.getElementById('winScreen');
-        let gameStarted = false;
-
-        document.getElementById('startButton').addEventListener('click', () => {
-            startScreen.style.display = 'none';
-            gameStarted = true;
-        });
-
-        document.getElementById('restartButton').addEventListener('click', () => {
-            winScreen.style.display = 'none';
-            treasure.position.set(Math.random() * 10 - 5, 0, Math.random() * 10 - 5);
-            player.position.set(0, 0, 0);
-            gameStarted = true;
-        });
-
-        // دورة التصيير (الرندر)
-        function animate() {
-            if (!gameStarted) {
-                requestAnimationFrame(animate);
-                return;
-            }
-
-            requestAnimationFrame(animate);
-
-            // تحريك الشخصية بناءً على التحكم
-            if (controls.up) player.position.z -= playerSpeed;
-            if (controls.down) player.position.z += playerSpeed;
-            if (controls.left) player.position.x -= playerSpeed;
-            if (controls.right) player.position.x += playerSpeed;
-
-            // التحقق إذا وصلت الشخصية للكنز
-            if (player.position.distanceTo(treasure.position) < 1) {
-                winSound.play();
-                winScreen.style.display = 'flex';
-                gameStarted = false;
-            }
-
-            renderer.render(scene, camera);
-        }
-        animate();
-    </script>
+    <!-- Cutscene -->
+    <div id="cutscene">
+        <div id="cutsceneText">
+            <h1>قصة اللعبة</h1>
+            <p>في عالم مليء بالأعداء، يجب عليك جمع الكنز الذهبي وتجنب الأعداء الحمراء. هل أنت مستعد للتحدي؟</p>
+            <button id="skipCutscene">تخطي</button>
+        </div>
+    </div>
 
     <!-- شاشة البداية -->
     <div id="startScreen">
         <h1>لعبة الكنز الذهبي!</h1>
-        <p>حرك المكعب الأخضر باستخدام الأزرار لجمع الكنز الذهبي.</p>
+        <p>حرك المكعب الأخضر باستخدام الأزرار لجمع الكنز الذهبي وتجنب الأعداء الحمراء.</p>
         <button id="startButton">ابدأ اللعبة</button>
     </div>
 
@@ -162,6 +29,12 @@
         <button id="restartButton">العب مرة أخرى</button>
     </div>
 
+    <!-- شاشة الخسارة -->
+    <div id="loseScreen" style="display: none;">
+        <h1>انتبه! لقد خسرت! 😢</h1>
+        <button id="restartButtonLose">العب مرة أخرى</button>
+    </div>
+
     <!-- عناصر التحكم باللمس -->
     <div id="controls">
         <button id="up">⬆️</button>
@@ -169,5 +42,8 @@
         <button id="down">⬇️</button>
         <button id="right">➡️</button>
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
