@@ -306,4 +306,60 @@ function shoot() {
     sounds.shoot.play();
     controls.shoot = false;
     enemies.forEach((enemy, index) => {
-        if (player.position.d
+        if (player.position.distanceTo(enemy.position) < settings.shootDistance) {
+            scene.remove(enemy);
+            enemies.splice(index, 1);
+        }
+    });
+}
+
+// التحقق من الفوز أو الخسارة
+function checkWinOrLose() {
+    if (player.position.distanceTo(treasure.position) < 1) {
+        sounds.win.play();
+        coins += settings.coinsPerTreasure;
+        updateCoins();
+        document.getElementById('winScreen').style.display = 'flex';
+        gameStarted = false;
+    }
+
+    enemies.forEach(enemy => {
+        if (player.position.distanceTo(enemy.position) < 1) {
+            sounds.lose.play();
+            document.getElementById('loseScreen').style.display = 'flex';
+            gameStarted = false;
+        }
+    });
+}
+
+// إنشاء عدو جديد
+function createEnemy() {
+    const enemyGeometry = new THREE.SphereGeometry(0.5, 32, 32);
+    const enemyMaterial = new THREE.MeshPhongMaterial({ color: 0xff0000 });
+    const enemy = new THREE.Mesh(enemyGeometry, enemyMaterial);
+    enemy.position.set(Math.random() * 20 - 10, 0, Math.random() * 20 - 10);
+    scene.add(enemy);
+    enemies.push(enemy);
+}
+
+// تحديث عدد العملات
+function updateCoins() {
+    const coinsCount = document.getElementById('coinsCount');
+    if (coinsCount) {
+        coinsCount.textContent = coins;
+    }
+}
+
+// إعادة تعيين اللعبة
+function resetGame() {
+    treasure.position.set(Math.random() * 20 - 10, 0, Math.random() * 20 - 10);
+    player.position.set(0, 0, 0);
+    enemies.forEach(enemy => scene.remove(enemy));
+    enemies.length = 0;
+    gameStarted = true;
+    document.getElementById('winScreen').style.display = 'none';
+    document.getElementById('loseScreen').style.display = 'none';
+}
+
+// تهيئة اللعبة عند تحميل الصفحة
+window.onload = init;
